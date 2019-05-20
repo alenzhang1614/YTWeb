@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul,li{
+            list-style: none;
+        }
+        a{
+            text-decoration: none;
+        }
+        html,body {
+            width: 100%;
+            height:100%;
+            overflow: hidden;
+            background-color: #001559;
+        }
+        #wrap{
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-image:url("images/bag_01.jpg") ;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        #wrap .headerWrap{
+            position: absolute;
+            z-index: 50;
+            margin-top: 44px;
+            width: 100%;
+            background-color: rgba(1,18,68,0.8);
+            /*background-color: #011244;*/
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+
+        }
+        #wrap .header{
+            position: relative;
+            height: 50px;
+            width: 1000px;
+            margin: 0 auto;
+        }
+        #wrap .header .logo{
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 114px;
+            height: 114px;
+            background-image: url("images/bg2.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 100% 100%;
+        }
+        #wrap .header .logo img{
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            margin: auto;
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+        }
+        #wrap .header .nav{
+            line-height: 50px;
+            float: right;
+
+        }
+        #wrap .header .nav a{
+            display: inline-block;
+            color: #fff;
+            font-size: 14px;
+            width: 124px;
+            border-right: 1px solid #000;
+            text-align: center;
+            height: 38px;
+            line-height: 38px;
+        }
+        #wrap .main{
+            width: 100%;
+            height: 100%;
+        }
+
+        #wrap .main .mainList .mainItem{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width:100% ;
+            /*opacity: 0;*/
+            display: none;
+            /*transition: 1s;*/
+            /*height: 801px;*/
+        }
+        #wrap .main .mainList .active{
+            /*transform:scale(1);*/
+            display: block;
+            /*opacity: 1;*/
+        }
+
+        #wrap .main .mainList #home{
+            background-image: url("images/bgc3.png");
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: cover;
+        }
+        #wrap .main .mainList #company{
+            background-image: url("images/bag4.jpg");
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: cover;
+            opacity: 0.1;
+        }
+
+
+    </style>
+</head>
+<body>
+<div id = "wrap">
+
+    <header class="headerWrap">
+        <div class = "header">
+            <h1 class = "logo">
+                <a href="javascript:;">
+                    <img src="images/logo.jpg" alt="">
+                </a>
+            </h1>
+            <nav class = "nav">
+                <a href="#home">
+                    首页
+                </a>
+                <a href="#company">
+                    公司简介
+                </a>
+                <a href="#product">
+                    产品详情
+                </a>
+                <a href="#team">
+                    团队介绍
+                </a>
+                <a href="#join">
+                    加入我们
+                </a>
+                <a href="#contact">
+                    联系我们
+                </a>
+            </nav>
+        </div>
+
+    </header>
+    <div class ="main">
+        <ul class="mainList">
+            <li class="mainItem active" id ="home">
+
+            </li>
+            <li class="mainItem" id = "company">
+
+            </li>
+            <li class="mainItem" id = "product">
+
+            </li>
+            <li class="mainItem" id ="team">
+
+            </li>
+            <li class="mainItem" id = "join">
+
+            </li>
+            <li class="mainItem" id = "contact">
+
+            </li>
+        </ul>
+    </div>
+
+
+</div>
+
+</body>
+<script>
+    getHeight()
+    function getHeight(){
+        var mainItem = document.querySelectorAll("#wrap .main .mainList .mainItem");
+
+        for(var i = 0;i<mainItem.length;i++){
+            mainItem[i].style.height = document.documentElement.clientHeight + "px"
+        }
+    }
+  window.onresize = function () {
+        getHeight()
+    }
+
+    //点击导航
+    clickNav();
+    function clickNav(){
+        var navItems = document.documentElement.querySelectorAll(" #wrap .header .nav a");
+        var mainItem = document.querySelectorAll("#wrap .main .mainList .mainItem");
+
+        navItems.forEach(function (item,index) {
+            item.onclick = function () {
+                mainItem.forEach(function (item,index){
+                    console.log("-------")
+                    item.classList.remove("active");
+                });
+                mainItem[index].classList.add("active");
+                console.log(mainItem[index]);
+            }
+        })
+    }
+
+    //home屏
+
+</script>
+</html>
