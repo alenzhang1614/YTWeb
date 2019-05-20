@@ -104,6 +104,12 @@
             display: block;
             /*opacity: 1;*/
         }
+        #wrap .main .mainList .mainItem .myCanvas{
+            position: absolute;
+            left: 0;
+            top: 0;
+           /*// background-color: pink;*/
+        }
 
         #wrap .main .mainList #home{
             background-image: url("images/bgc3.png");
@@ -158,7 +164,7 @@
     <div class ="main">
         <ul class="mainList">
             <li class="mainItem active" id ="home">
-
+                <canvas class = "myCanvas"></canvas>
             </li>
             <li class="mainItem" id = "company">
 
@@ -214,6 +220,72 @@
     }
 
     //home屏
+    //canvas
+    var myCanvas = document.querySelector("#wrap .main .mainList #home .myCanvas");
+    myCanvas.width = document.documentElement.clientWidth;
+    myCanvas.height = document.documentElement.clientHeight;
+    var ctx = myCanvas.getContext("2d");
+    var arr = [];
+    setInterval(function () {
+        var obj = {};
+       obj.x =  Math.floor( myCanvas.width * (Math.random()*3/5+1/5)),
+       obj.y = myCanvas.height - 80 ,
+       obj.r1 = Math.floor(Math.random()*10),
+       obj.r2 = Math.floor(Math.random()*10)+obj.r1,
+       // obj.startDeg = 0;
+       obj.scaleValue =  Math.random() * 100 + 70;
+       obj.scale = Math.random();
+       obj.startX = obj.x;
+        obj.startY = obj.y;
+        obj.opcity = Math.random()
+       arr.push(obj)
+
+    },200)
+
+
+    setInterval(function () {
+        ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
+        for(var i = 0; i < arr.length; i++){
+            var obj = arr[i];
+            obj.startX ++;
+            //obj.x = obj.startX + Math.sin(obj.startDeg * Math.PI / 180) * obj.scaleValue * 0.5;
+            obj.y = obj.startY --;
+            if(obj.y+obj.r <= 0){
+                  arr.splice(i,1);
+            }
+        }
+
+        for(var i = 0; i < arr.length; i++){
+            var obj = arr[i];
+             ctx.beginPath();
+
+             ctx.arc(obj.x , obj.y ,obj.r2 , 0, Math.PI * 2, false);
+              var canvasGradient = ctx.createRadialGradient(obj.x ,obj.y,obj.r1,obj.x,obj.y,obj.r2);
+
+             canvasGradient.addColorStop(0,"rgba(255,255,255,"+obj.opcity+")");
+
+            canvasGradient.addColorStop(obj.scale ,"rgba(255,255,255,"+obj.opcity+")");
+
+             canvasGradient.addColorStop(1, "rgba(255,255,255,0)" );
+
+            ctx.fillStyle = canvasGradient;
+
+             ctx.fill();
+        }
+
+    },16)
+
+
+
+
+
+
+
+
+
+
+
+
 
 </script>
 </html>
