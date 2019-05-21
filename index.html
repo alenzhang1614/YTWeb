@@ -124,8 +124,31 @@
             background-size: cover;
             opacity: 0.1;
         }
+        #wrap .main .mainList #home .bannerWrap{
+            width: 100%;
+            height: 100%;
+        }
+        #wrap .main .mainList #home .bannerWrap .bannerList{
+            position: relative;
+            width: 100%;
+            height: 100%;
 
-
+        }
+        #wrap .main .mainList #home .bannerWrap .bannerList .bannerItem{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            opacity: 0;
+            transition: 1s;
+        }
+        #wrap .main .mainList #home .bannerWrap .bannerList .bannerItem img{
+            height: 308px;
+        }
+        #wrap .main .mainList #home .bannerWrap .bannerList .bannerItem.active{
+            display: block;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -165,6 +188,26 @@
         <ul class="mainList">
             <li class="mainItem active" id ="home">
                 <canvas class = "myCanvas"></canvas>
+                <div class="bannerWrap">
+                    <ul class="bannerList">
+                        <li class="bannerItem active">
+                            <a href=""><img src="images/banner1.png" alt=""></a>
+                        </li>
+                        <li class="bannerItem">
+                            <a href=""><img src="images/img2.png" alt=""></a>
+                        </li>
+                        <li class="bannerItem">
+                            <a href=""><img src="images/img3.png" alt=""></a>
+                        </li>
+                        <li class="bannerItem">
+                            <a href=""><img src="images/img4.png" alt=""></a>
+                        </li>
+                        <li class="bannerItem">
+                            <a href=""><img src="images/img5.png" alt=""></a>
+                        </li>
+                    </ul>
+                </div>
+
             </li>
             <li class="mainItem" id = "company">
 
@@ -221,66 +264,70 @@
 
     //home屏
     //canvas
-    var myCanvas = document.querySelector("#wrap .main .mainList #home .myCanvas");
-    myCanvas.width = document.documentElement.clientWidth;
-    myCanvas.height = document.documentElement.clientHeight;
-    var ctx = myCanvas.getContext("2d");
-    var arr = [];
-    setInterval(function () {
-        var obj = {};
-       obj.x =  Math.floor( myCanvas.width * (Math.random()*3/5+1/5)),
-       obj.y = myCanvas.height - 80 ,
-       obj.r1 = Math.floor(Math.random()*10),
-       obj.r2 = Math.floor(Math.random()*10)+obj.r1,
-       // obj.startDeg = 0;
-      // obj.scaleValue =  Math.random() * 100 + 70;
-       obj.scale = Math.random();
-       obj.startX = obj.x;
-        obj.startY = obj.y;
-        obj.opcity = Math.random();
-        obj.starDeg =obj.startX/myCanvas.width*180;
-        obj.endX = obj.startX- obj.y / Math.tan(obj.starDeg*Math.PI/180);
-        obj.endX = obj.endX<= 0?0:obj.endX;
-        obj.endX  = obj.endX>= myCanvas.width?myCanvas.width:obj.endX;
-       arr.push(obj)
-    },300);
+    bubble()
+    function bubble(){
+        var myCanvas = document.querySelector("#wrap .main .mainList #home .myCanvas");
+        myCanvas.width = document.documentElement.clientWidth;
+        myCanvas.height = document.documentElement.clientHeight;
+        var ctx = myCanvas.getContext("2d");
+        var arr = [];
+        setInterval(function () {
+            var obj = {};
+            obj.x =  Math.floor( myCanvas.width * (Math.random()*3/5+1/5)),
+                //    obj.y = (myCanvas.height - 80)
+                obj.y = Math.floor( (myCanvas.height-80) * Math.random()) ,
+                obj.r1 = Math.floor(Math.random()*10),
+                obj.r2 = Math.floor(Math.random()*10)+obj.r1,
+                obj.scale = Math.random();
+            obj.startX = obj.x;
+            obj.startY = obj.y;
+            obj.opcity = Math.random();
+            obj.starDeg =obj.startX/myCanvas.width*180;
+            obj.endX = obj.startX- obj.y / Math.tan(obj.starDeg*Math.PI/180);
+            obj.endX = obj.endX<= 0?0:obj.endX;
+            obj.endX  = obj.endX>= myCanvas.width?myCanvas.width:obj.endX;
+            arr.push(obj)
+        },300);
 
-    setInterval(function () {
-        ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
-        for(var i = 0; i < arr.length; i++){
-            var obj = arr[i];
-            obj.y = obj.startY --;
-            obj.x = obj.endX +obj.y / Math.tan(obj.starDeg*Math.PI/180);
-            if(obj.y+obj.r2 <= 0){
-              arr.splice(i,1);
+        setInterval(function () {
+            ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
+            for(var i = 0; i < arr.length; i++){
+                var obj = arr[i];
+                obj.y = obj.startY --;
+                obj.x = (obj.endX +obj.y / Math.tan(obj.starDeg*Math.PI/180));
+                // obj.x = obj.x<= 0?0:obj.x;
+                // obj.x  = obj.x>= myCanvas.width?myCanvas.width:obj.x;
+                if(obj.y+obj.r2 <= 0){
+                    arr.splice(i,1);
+                }
             }
-        }
+            for(var i = 0; i < arr.length; i++){
+                var obj = arr[i];
+                ctx.beginPath();
+                ctx.arc(obj.x , obj.y ,obj.r2 , 0, Math.PI * 2, false);
+                var canvasGradient = ctx.createRadialGradient(obj.x ,obj.y,obj.r1,obj.x,obj.y,obj.r2);
+                canvasGradient.addColorStop(0,"rgba(255,255,255,"+obj.opcity+")");
+                canvasGradient.addColorStop(obj.scale ,"rgba(255,255,255,"+obj.opcity+")");
+                canvasGradient.addColorStop(1, "rgba(255,255,255,0)" );
+                ctx.fillStyle = canvasGradient;
+                ctx.fill();
+            }
+        },16)
 
-        for(var i = 0; i < arr.length; i++){
-            var obj = arr[i];
-            ctx.beginPath();
-            ctx.arc(obj.x , obj.y ,obj.r2 , 0, Math.PI * 2, false);
-            var canvasGradient = ctx.createRadialGradient(obj.x ,obj.y,obj.r1,obj.x,obj.y,obj.r2);
-            canvasGradient.addColorStop(0,"rgba(255,255,255,"+obj.opcity+")");
-            canvasGradient.addColorStop(obj.scale ,"rgba(255,255,255,"+obj.opcity+")");
-            canvasGradient.addColorStop(1, "rgba(255,255,255,0)" );
-            ctx.fillStyle = canvasGradient;
-            ctx.fill();
-        }
+        var bannerItems = document.querySelectorAll("#wrap .main .mainList #home .bannerWrap .bannerList .bannerItem");
+        var index = -1;
 
-    },16)
+        var timer1 =setInterval(function () {
+            bannerItems.forEach(function(item){
+                item.classList.remove("active")
+            })
+            index++;
+            index = index>=bannerItems.length?0:index;
+            bannerItems[index].classList.add("active")
 
+        },2000)
 
 
-
-
-
-
-
-
-
-
-
-
+    }
 </script>
 </html>
