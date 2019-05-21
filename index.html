@@ -233,44 +233,39 @@
        obj.r1 = Math.floor(Math.random()*10),
        obj.r2 = Math.floor(Math.random()*10)+obj.r1,
        // obj.startDeg = 0;
-       obj.scaleValue =  Math.random() * 100 + 70;
+      // obj.scaleValue =  Math.random() * 100 + 70;
        obj.scale = Math.random();
        obj.startX = obj.x;
         obj.startY = obj.y;
-        obj.opcity = Math.random()
+        obj.opcity = Math.random();
+        obj.starDeg =obj.startX/myCanvas.width*180;
+        obj.endX = obj.startX- obj.y / Math.tan(obj.starDeg*Math.PI/180);
+        obj.endX = obj.endX<= 0?0:obj.endX;
+        obj.endX  = obj.endX>= myCanvas.width?myCanvas.width:obj.endX;
        arr.push(obj)
-
-    },200)
-
+    },300);
 
     setInterval(function () {
         ctx.clearRect(0,0,myCanvas.width,myCanvas.height);
         for(var i = 0; i < arr.length; i++){
             var obj = arr[i];
-            obj.startX ++;
-            //obj.x = obj.startX + Math.sin(obj.startDeg * Math.PI / 180) * obj.scaleValue * 0.5;
             obj.y = obj.startY --;
-            if(obj.y+obj.r <= 0){
-                  arr.splice(i,1);
+            obj.x = obj.endX +obj.y / Math.tan(obj.starDeg*Math.PI/180);
+            if(obj.y+obj.r2 <= 0){
+              arr.splice(i,1);
             }
         }
 
         for(var i = 0; i < arr.length; i++){
             var obj = arr[i];
-             ctx.beginPath();
-
-             ctx.arc(obj.x , obj.y ,obj.r2 , 0, Math.PI * 2, false);
-              var canvasGradient = ctx.createRadialGradient(obj.x ,obj.y,obj.r1,obj.x,obj.y,obj.r2);
-
-             canvasGradient.addColorStop(0,"rgba(255,255,255,"+obj.opcity+")");
-
+            ctx.beginPath();
+            ctx.arc(obj.x , obj.y ,obj.r2 , 0, Math.PI * 2, false);
+            var canvasGradient = ctx.createRadialGradient(obj.x ,obj.y,obj.r1,obj.x,obj.y,obj.r2);
+            canvasGradient.addColorStop(0,"rgba(255,255,255,"+obj.opcity+")");
             canvasGradient.addColorStop(obj.scale ,"rgba(255,255,255,"+obj.opcity+")");
-
-             canvasGradient.addColorStop(1, "rgba(255,255,255,0)" );
-
+            canvasGradient.addColorStop(1, "rgba(255,255,255,0)" );
             ctx.fillStyle = canvasGradient;
-
-             ctx.fill();
+            ctx.fill();
         }
 
     },16)
